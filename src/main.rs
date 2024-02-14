@@ -23,7 +23,7 @@ pub mod phred_int_to_prob;
 use phred_int_to_prob::PHRED_TO_ERROR_PROB;
 
 #[derive(Debug, StructOpt)]
-#[structopt(name = "bampA", about = "Detects and estimates polyA/T tail lengths in DNA sequencing data with a given adapter sequence.")]
+#[structopt(name = "bam2bc", about = "Detects sequence barcodes via Levenshtein distances given an adapter sequence.")]
 struct Config {
     #[structopt(parse(from_os_str), short="i", help = "Input bam file")]
     input_file: PathBuf,
@@ -48,7 +48,7 @@ struct Config {
     
     #[structopt(short="s", long, help = "Ignore moves with samples above this threshold to calculate mean translocation speed (correcting for stalling/tails)", default_value="200")]
     max_samples_per_move: usize,
-    
+
     #[structopt(short="v", long, help = "Will print to stdout")]
     verbose: bool,
 }
@@ -77,7 +77,7 @@ fn main() -> std::io::Result<()> {
     let ignore_end_for_qscore: usize = config.ignore_end_for_qscore;
     let max_samples_per_move: usize = config.max_samples_per_move;
     let verbose: bool = config.verbose;
-
+    
     // read in barcodes to search for
     let barcodes = read_in_barcodes(&config.barcode_file).expect("Failed to read barcode file");
     let num_barcodes = barcodes.len();
